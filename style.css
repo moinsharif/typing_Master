@@ -640,6 +640,36 @@ body {
     background: rgba(255, 255, 255, 0.05);
 }
 
+.heatmap-keyboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.4);
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    margin-bottom: 25px;
+}
+
+.heatmap-keyboard-wrapper .key {
+    width: 50px;
+    height: 50px;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.heatmap-keyboard-wrapper .key.space {
+    width: 300px;
+}
+    background: rgba(255, 255, 255, 0.05);
+}
+
 .user-link {
     color: var(--primary);
     cursor: pointer;

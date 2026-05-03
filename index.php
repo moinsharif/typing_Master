@@ -22,6 +22,7 @@ if (!isset($_SESSION['user_id'])) {
             $_SESSION['user_id'] = $guest['id'];
             $_SESSION['username'] = $guest['username'];
             $_SESSION['is_guest'] = true;
+            $_SESSION['is_admin'] = false; // Ensure they are not admin
         }
     }
 }
@@ -144,7 +145,7 @@ echo "<script>console.log('PHP Session User: " . ($username ? $username : 'None'
                             <g class="finger-group" data-finger="l-thumb">
                                 <path class="finger-path" d="M140,160 Q160,140 180,160" />
                             </g>
-                            <path class="palm" d="M40,120 Q40,210 110,220 T180,160 L180,240 Q110,250 40,240 Z" />
+                            <path class="palm" d="M40,120c0,47.8,19,100.9,77.9,100.9C159.3,220.9,180,207.8,180,160" />
                         </svg>
 
                         <!-- Right Hand -->
@@ -168,7 +169,7 @@ echo "<script>console.log('PHP Session User: " . ($username ? $username : 'None'
                                 <path class="finger-path" d="M160,120 Q165,70 155,70 T145,120" />
                                 <rect class="nail" x="153" y="75" width="4" height="6" rx="2" />
                             </g>
-                            <path class="palm" d="M160,120 Q160,210 90,220 T20,160 L20,240 Q90,250 160,240 Z" />
+                            <path class="palm" d="M160,120c0,47.8-19,100.9-77.9,100.9C40.7,220.9,20,207.8,20,160" />
                         </svg>
                     </div>
                 </div>
@@ -240,7 +241,7 @@ echo "<script>console.log('PHP Session User: " . ($username ? $username : 'None'
                 <h2 id="detail-user-name">User Report</h2>
                 <div class="analysis-card">
                     <h3>Performance Heatmap (Average Time per Key)</h3>
-                    <div id="user-heatmap" class="heatmap-container"></div>
+                    <div id="heatmap-keyboard-container" class="heatmap-keyboard-wrapper"></div>
                     <div id="user-advice-box" class="advice-content"></div>
                 </div>
                 <button class="close-modal">&times;</button>

@@ -1,15 +1,15 @@
 const WORD_LISTS = {
-    'very-easy': ['the', 'of', 'and', 'a', 'to', 'in', 'is', 'you', 'that', 'it', 'he', 'was', 'for', 'on', 'are', 'as', 'with', 'his', 'they', 'at', 'be', 'this', 'have', 'from', 'or', 'one', 'had', 'by', 'word', 'but', 'not', 'what', 'all', 'were', 'we', 'when', 'your', 'can', 'said', 'there', 'use', 'an', 'each', 'which', 'she', 'do', 'how', 'their', 'if'],
-    'easy': ['about', 'many', 'then', 'them', 'these', 'so', 'some', 'her', 'would', 'make', 'like', 'him', 'into', 'time', 'has', 'look', 'two', 'more', 'write', 'go', 'see', 'number', 'no', 'way', 'could', 'people', 'my', 'than', 'first', 'water', 'been', 'called', 'who', 'oil', 'its', 'now', 'find', 'long', 'down', 'day', 'did', 'get', 'come', 'made', 'may', 'part'],
-    'medium': ['mountain', 'discover', 'beautiful', 'wonderful', 'fountain', 'building', 'tomorrow', 'computer', 'science', 'history', 'language', 'country', 'important', 'example', 'experience', 'together', 'problem', 'thought', 'through', 'between', 'sentence', 'difference', 'possible', 'government', 'interest', 'process', 'increase', 'surface', 'material', 'special', 'natural', 'general', 'current', 'provide', 'suggest', 'develop'],
-    'hard': ['encyclopedia', 'characteristic', 'sophisticated', 'unbelievable', 'extraordinary', 'implementation', 'communication', 'organization', 'relationship', 'development', 'environment', 'information', 'knowledge', 'perspective', 'philosophy', 'psychology', 'technology', 'understanding', 'visualization', 'opportunity', 'competition', 'consequence', 'destination', 'exploration', 'imagination', 'innovation', 'observation', 'participation'],
-    'very-hard': ['pneumonoultramicroscopicsilicovolcanoconiosis', 'floccinaucinihilipilification', 'antidisestablishmentarianism', 'honorificabilitudinitatibus', 'spectrophotofluorometrically', 'pseudopseudohypoparathyroidism', 'psychoneuroendocrinoimmunology', 'hepaticocholangiogastroenterostomy', 'radioimmunoelectrophoresis', 'thyroparathyroidectomized', 'dichlorodiphenyltrichloroethane']
+    'very-easy': ['the', 'of', 'and', 'a', 'to', 'in', 'is', 'you', 'that', 'it', 'he', 'was', 'for', 'on', 'are', 'as', 'with', 'his', 'they', 'at', 'be', 'this', 'have', 'from', 'or', 'one', 'had', 'by', 'word', 'but', 'not', 'what', 'all', 'were', 'we', 'when', 'your', 'can', 'said', 'there', 'use', 'an', 'each', 'which', 'she', 'do', 'how', 'their', 'if', 'just', 'him', 'know', 'take', 'person', 'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see', 'other', 'than', 'then', 'now', 'look', 'only', 'come', 'its', 'over', 'think', 'also', 'back', 'after', 'use', 'two', 'how', 'our', 'work', 'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'these', 'give', 'day', 'most', 'us', 'very', 'many', 'make', 'here', 'life', 'get', 'much', 'before', 'right', 'those', 'through', 'own', 'long', 'where', 'around', 'must', 'help', 'queen', 'zero', 'extra', 'box', 'vivid', 'jump', 'lazy', 'dog', 'quick', 'fox'],
+    'easy': ['about', 'many', 'then', 'them', 'these', 'so', 'some', 'her', 'would', 'make', 'like', 'him', 'into', 'time', 'has', 'look', 'two', 'more', 'write', 'go', 'see', 'number', 'no', 'way', 'could', 'people', 'my', 'than', 'first', 'water', 'been', 'called', 'who', 'oil', 'its', 'now', 'find', 'long', 'down', 'day', 'did', 'get', 'come', 'made', 'may', 'part', 'over', 'such', 'sound', 'take', 'only', 'little', 'work', 'know', 'year', 'live', 'me', 'back', 'give', 'most', 'very', 'after', 'thing', 'our', 'just', 'name', 'good', 'sentence', 'man', 'think', 'say', 'great', 'where', 'help', 'through', 'much', 'before', 'line', 'right', 'too', 'means', 'old', 'any', 'same', 'tell', 'boy', 'follow', 'came', 'want', 'show', 'also', 'around', 'form', 'three', 'small', 'puzzles', 'quartz', 'vortex', 'zigzag', 'joker', 'boxing'],
+    'medium': ['mountain', 'discover', 'beautiful', 'wonderful', 'fountain', 'building', 'tomorrow', 'computer', 'science', 'history', 'language', 'country', 'important', 'example', 'experience', 'together', 'problem', 'thought', 'through', 'between', 'sentence', 'difference', 'possible', 'government', 'interest', 'process', 'increase', 'surface', 'material', 'special', 'natural', 'general', 'current', 'provide', 'suggest', 'develop', 'consider', 'public', 'system', 'program', 'during', 'present', 'without', 'follow', 'believe', 'create', 'control', 'happen', 'write', 'support', 'require', 'decide', 'expect', 'receive', 'change', 'remain', 'remember', 'allow', 'appear', 'continue', 'suggest', 'increase', 'improve', 'compare', 'expect', 'analyze', 'oxygen', 'complex', 'equinox', 'juxtapose', 'zephyr', 'vibrant', 'keyboard'],
+    'hard': ['encyclopedia', 'characteristic', 'sophisticated', 'unbelievable', 'extraordinary', 'implementation', 'communication', 'organization', 'relationship', 'development', 'environment', 'information', 'knowledge', 'perspective', 'philosophy', 'psychology', 'technology', 'understanding', 'visualization', 'opportunity', 'competition', 'consequence', 'destination', 'exploration', 'imagination', 'innovation', 'observation', 'participation', 'achievement', 'environment', 'description', 'everything', 'generation', 'historical', 'management', 'necessary', 'particular', 'successful', 'themselves', 'traditional', 'university', 'collection', 'conference', 'difficulty', 'experience', 'individual', 'investment', 'performance', 'production', 'significant', 'situation', 'successful', 'themselves', 'traditional', 'underneath', 'xenon', 'quartz', 'quizzical', 'objective', 'frequency'],
+    'very-hard': ['pneumonoultramicroscopicsilicovolcanoconiosis', 'floccinaucinihilipilification', 'antidisestablishmentarianism', 'honorificabilitudinitatibus', 'spectrophotofluorometrically', 'pseudopseudohypoparathyroidism', 'psychoneuroendocrinoimmunology', 'hepaticocholangiogastroenterostomy', 'radioimmunoelectrophoresis', 'thyroparathyroidectomized', 'dichlorodiphenyltrichloroethane', 'incomprehensibilities', 'unpredictability', 'institutionalization', 'unconstitutionality', 'characteristically', 'disproportionately', 'counterproductive', 'misunderstanding', 'synchronization', 'transformation', 'unavailability', 'vulnerability', 'acknowledgment', 'revolutionary', 'simultaneously', 'sophistication', 'superintendent', 'unidirectional', 'quantitatively', 'neutralization', 'lexicographical']
 };
 
 const KEYBOARD_LAYOUT = [
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-    ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';'],
+    ['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/'],
     ['space']
 ];
 
@@ -21,10 +21,10 @@ const FINGER_MAP = {
     't': 'l-index', 'g': 'l-index', 'b': 'l-index',
     'y': 'r-index', 'h': 'r-index', 'n': 'r-index',
     'u': 'r-index', 'j': 'r-index', 'm': 'r-index',
-    'i': 'r-middle', 'k': 'r-middle',
-    'o': 'r-ring', 'l': 'r-ring',
-    'p': 'r-pinky',
-    'space': 'r-thumb' // or l-thumb
+    'i': 'r-middle', 'k': 'r-middle', ',': 'r-middle',
+    'o': 'r-ring', 'l': 'r-ring', '.': 'r-ring',
+    'p': 'r-pinky', ';': 'r-pinky', '/': 'r-pinky',
+    'space': 'r-thumb'
 };
 
 class TypeMaster {
@@ -260,9 +260,9 @@ class TypeMaster {
     async loadUserAnalysis(username) {
         this.toggleModal('user-detail-modal', true);
         document.getElementById('detail-user-name').textContent = `Performance Report: ${username}`;
-        const heatmap = document.getElementById('user-heatmap');
+        const container = document.getElementById('heatmap-keyboard-container');
         const adviceBox = document.getElementById('user-advice-box');
-        heatmap.innerHTML = 'Loading analysis...';
+        container.innerHTML = 'Loading analysis...';
         adviceBox.innerHTML = '';
 
         try {
@@ -270,41 +270,79 @@ class TypeMaster {
             const data = await resp.json();
             if (!data.success) return;
 
-            heatmap.innerHTML = '';
+            container.innerHTML = '';
             const slowKeys = [];
             
-            for (const [key, avg] of Object.entries(data.analysis)) {
-                const keyEl = document.createElement('div');
-                keyEl.className = 'heatmap-key';
-                keyEl.innerHTML = `${key}<br><small>${Math.round(avg)}ms</small>`;
-                
-                if (avg > 400) {
-                    keyEl.style.background = 'rgba(248, 113, 113, 0.3)';
-                    slowKeys.push({key, avg});
-                } else if (avg > 200) {
-                    keyEl.style.background = 'rgba(251, 191, 36, 0.3)';
-                } else {
-                    keyEl.style.background = 'rgba(74, 222, 128, 0.3)';
-                }
-                heatmap.appendChild(keyEl);
-            }
+            KEYBOARD_LAYOUT.forEach(row => {
+                const rowEl = document.createElement('div');
+                rowEl.className = 'kb-row';
+                row.forEach(key => {
+                    const keyEl = document.createElement('div');
+                    keyEl.className = `key ${key === 'space' ? 'space' : ''}`;
+                    keyEl.textContent = key === 'space' ? '' : key;
+                    
+                    const avg = data.analysis[key.toLowerCase()];
+                    if (avg) {
+                        keyEl.innerHTML = `${key === 'space' ? '' : key}<br><small style="font-size:0.6rem;opacity:0.8">${Math.round(avg)}ms</small>`;
+                        if (avg > 500) {
+                            keyEl.style.background = 'rgba(248, 113, 113, 0.8)';
+                            keyEl.style.color = 'white';
+                            slowKeys.push({key, avg});
+                        } else if (avg > 250) {
+                            keyEl.style.background = 'rgba(251, 191, 36, 0.8)';
+                            keyEl.style.color = 'black';
+                        } else {
+                            keyEl.style.background = 'rgba(74, 222, 128, 0.8)';
+                            keyEl.style.color = 'black';
+                        }
+                    } else {
+                        keyEl.style.opacity = '0.3';
+                    }
+                    rowEl.appendChild(keyEl);
+                });
+                container.appendChild(rowEl);
+            });
 
             if (slowKeys.length > 0) {
                 slowKeys.sort((a, b) => b.avg - a.avg);
                 const topSlow = slowKeys.slice(0, 3).map(k => `"${k.key.toUpperCase()}"`).join(', ');
                 adviceBox.innerHTML = `<p>This learner is struggling with: <b>${topSlow}</b>. Suggest more practice on these keys.</p>`;
-            } else {
+            } else if (Object.keys(data.analysis).length > 0) {
                 adviceBox.innerHTML = `<p>This learner has consistent speed across all keys. Excellent progress!</p>`;
+            } else {
+                adviceBox.innerHTML = `<p>No typing data available for this user yet.</p>`;
             }
         } catch (e) { console.error(e); }
     }
 
     loadWords() {
         const list = WORD_LISTS[this.currentLevel];
-        this.words = [];
-        for (let i = 0; i < 500; i++) {
-            this.words.push(list[Math.floor(Math.random() * list.length)]);
+        const guaranteedWords = [];
+        const requiredChars = 'abcdefghijklmnopqrstuvwxyz,./;'.split('');
+        let remainingChars = [...requiredChars];
+        
+        // 1. Collect words to cover all keys
+        while (remainingChars.length > 0) {
+            const targetChar = remainingChars[0];
+            const matchingWord = list.find(w => w.includes(targetChar));
+            if (matchingWord) {
+                guaranteedWords.push(matchingWord);
+                remainingChars = remainingChars.filter(char => !matchingWord.includes(char));
+            } else {
+                guaranteedWords.push(targetChar);
+                remainingChars.shift();
+            }
         }
+
+        // 2. Collect remaining words randomly
+        const randomWords = [];
+        while (randomWords.length < 250) {
+            randomWords.push(list[Math.floor(Math.random() * list.length)]);
+        }
+
+        // 3. Combine: Guaranteed words come FIRST to ensure coverage even in short sessions
+        this.words = [...guaranteedWords, ...randomWords];
+        
         this.renderWords();
     }
 
