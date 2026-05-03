@@ -119,57 +119,63 @@ echo "<script>console.log('PHP Session User: " . ($username ? $username : 'None'
                 </div>
             </div>
 
-            <!-- Virtual Keyboard -->
+            <!-- Virtual Keyboard Section -->
             <section id="keyboard-wrapper" class="keyboard-section">
                 <div class="keyboard-container">
                     <div class="keyboard"></div>
-                    <div class="hands-overlay">
+                    <div class="hands-overlay side-layout">
                         <!-- Left Hand -->
-                        <svg class="hand-svg realistic" id="left-hand-svg" viewBox="0 0 200 250">
-                            <g class="finger-group" data-finger="l-pinky">
-                                <path class="finger-path" d="M40,120 Q35,70 45,70 T55,120" />
-                                <rect class="nail" x="43" y="75" width="4" height="6" rx="2" />
+                        <svg class="hand-svg-side realistic" id="left-hand-svg" viewBox="0 0 300 300">
+                            <g class="hand-group" id="left-hand">
+                                <g class="finger-group" data-finger="l-pinky">
+                                    <path class="finger-path" d="M33.1,132.4c0-53.1-5.3-79.8-16-79.8s-13.2,26.7-8,79.8"/>
+                                    <path class="nail" d="M20.4,63.7v3.2c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2c0-1.8,1.4-3.2,3.2-3.2l0,0 C18.9,60.6,20.4,62,20.4,63.7z"/>
+                                </g>
+                                <g class="finger-group" data-finger="l-ring">
+                                    <path class="finger-path" d="M73,116.4c0-63.8-5.3-95.8-16-95.8s-13.2,31.9-8,95.8"/>
+                                    <path class="nail" d="M60.3,31.8V35c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2c0-1.8,1.4-3.2,3.2-3.2l0,0 C58.8,28.6,60.3,30.1,60.3,31.8z"/>
+                                </g>
+                                <g class="finger-group" data-finger="l-middle">
+                                    <path class="finger-path" d="M112.9,108.4c0-69.1-5.3-103.7-16-103.7s-13.2,34.6-8,103.7"/>
+                                    <path class="nail" d="M100.2,15.9v3.2c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2c0-1.8,1.4-3.2,3.2-3.2l0,0 C98.7,12.7,100.2,14.1,100.2,15.9z"/>
+                                </g>
+                                <g class="finger-group" data-finger="l-index">
+                                    <path class="finger-path" d="M152.8,116.4c0-58.6-5.3-87.8-16-87.8s-13.2,29.2-8,87.8"/>
+                                    <path class="nail" d="M140.1,39.8V43c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2c0-1.8,1.4-3.2,3.2-3.2l0,0 C138.6,36.6,140.1,38.1,140.1,39.8z"/>
+                                </g>
+                                <g class="finger-group" data-finger="l-thumb">
+                                    <path class="finger-path" d="M164,175.1c71.5-82.5,53.5-115.9-9.9-32.2"/>
+                                    <path class="nail" d="M203.4,101.4l1.3,0.8c1.4,0.8,1.9,2.6,1,4l-2.6,3.8c-0.8,1.4-2.9,1.9-4.3,1.1l-1.3-0.8c-1.4-0.8-1.9-2.6-1-4l2.6-3.8 C200.1,101.1,202.1,100.6,203.4,101.4z"/>
+                                </g>
+                                <path class="palm" d="M152.8,116.4c-2.4,48.7,18.7,63.5,22.3,91c6.2,47.1-6.5,80.6-41.7,86 c-92.9,14.4-124.3-84.7-124.3-161"/>
                             </g>
-                            <g class="finger-group" data-finger="l-ring">
-                                <path class="finger-path" d="M65,110 Q60,50 70,50 T80,110" />
-                                <rect class="nail" x="68" y="55" width="4" height="6" rx="2" />
-                            </g>
-                            <g class="finger-group" data-finger="l-middle">
-                                <path class="finger-path" d="M90,105 Q85,40 95,40 T105,105" />
-                                <rect class="nail" x="93" y="45" width="4" height="6" rx="2" />
-                            </g>
-                            <g class="finger-group" data-finger="l-index">
-                                <path class="finger-path" d="M115,110 Q110,55 120,55 T130,110" />
-                                <rect class="nail" x="118" y="60" width="4" height="6" rx="2" />
-                            </g>
-                            <g class="finger-group" data-finger="l-thumb">
-                                <path class="finger-path" d="M140,160 Q160,140 180,160" />
-                            </g>
-                            <path class="palm" d="M40,120c0,47.8,19,100.9,77.9,100.9C159.3,220.9,180,207.8,180,160" />
                         </svg>
 
                         <!-- Right Hand -->
-                        <svg class="hand-svg realistic" id="right-hand-svg" viewBox="0 0 200 250">
-                            <g class="finger-group" data-finger="r-thumb">
-                                <path class="finger-path" d="M60,160 Q40,140 20,160" />
+                        <svg class="hand-svg-side realistic" id="right-hand-svg" viewBox="300 0 300 300">
+                            <g class="hand-group" id="right-hand">
+                                <g class="finger-group" data-finger="r-thumb">
+                                    <path class="finger-path" d="M452.1,142.9c-63.4-83.6-81.4-50.3-9.9,32.2"/>
+                                    <path class="nail" d="M407.1,102.5l2.6,3.8c1,1.4,0.5,3.2-1,4l-1.3,0.8c-1.4,0.8-3.5,0.3-4.3-1.1l-2.6-3.8c-1-1.4-0.5-3.2,1-4l1.3-0.8 C404.1,100.6,406.1,101.1,407.1,102.5z"/>
+                                </g>
+                                <g class="finger-group" data-finger="r-index">
+                                    <path class="finger-path" d="M477.3,116.4c5.3-58.6,2.7-87.8-8-87.8c-10.7,0-16,29.2-16,87.8"/>
+                                    <path class="nail" d="M469.3,36.6L469.3,36.6c1.8,0,3.2,1.4,3.2,3.2V43c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2 C466.1,38.1,467.6,36.6,469.3,36.6z"/>
+                                </g>
+                                <g class="finger-group" data-finger="r-middle">
+                                    <path class="finger-path" d="M517.2,108.4c5.3-69.1,2.7-103.7-8-103.7s-16,34.6-16,103.7"/>
+                                    <path class="nail" d="M509.2,12.7L509.2,12.7c1.8,0,3.2,1.4,3.2,3.2v3.2c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2 C506,14.1,507.5,12.7,509.2,12.7z"/>
+                                </g>
+                                <g class="finger-group" data-finger="r-ring">
+                                    <path class="finger-path" d="M557.1,116.4c5.3-63.8,2.7-95.8-8-95.8c-10.7,0-16,31.9-16,95.8"/>
+                                    <path class="nail" d="M549.1,28.6L549.1,28.6c1.8,0,3.2,1.4,3.2,3.2V35c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2 C545.9,30.1,547.4,28.6,549.1,28.6z"/>
+                                </g>
+                                <g class="finger-group" data-finger="r-pinky">
+                                    <path class="finger-path" d="M597,132.4c5.3-53.1,2.7-79.8-8-79.8s-16,26.7-16,79.8"/>
+                                    <path class="nail" d="M589,60.6L589,60.6c1.8,0,3.2,1.4,3.2,3.2v3.2c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2 C585.8,62,587.3,60.6,589,60.6z"/>
+                                </g>
+                                <path class="palm" d="M597,132.4c0,76.3-31.4,175.4-124.3,161c-35.1-5.4-47.9-38.9-41.7-86 c3.7-27.5,24.7-42.3,22.3-91"/>
                             </g>
-                            <g class="finger-group" data-finger="r-index">
-                                <path class="finger-path" d="M85,110 Q90,55 80,55 T70,110" />
-                                <rect class="nail" x="78" y="60" width="4" height="6" rx="2" />
-                            </g>
-                            <g class="finger-group" data-finger="r-middle">
-                                <path class="finger-path" d="M110,105 Q115,40 105,40 T95,105" />
-                                <rect class="nail" x="103" y="45" width="4" height="6" rx="2" />
-                            </g>
-                            <g class="finger-group" data-finger="r-ring">
-                                <path class="finger-path" d="M135,110 Q140,50 130,50 T120,110" />
-                                <rect class="nail" x="128" y="55" width="4" height="6" rx="2" />
-                            </g>
-                            <g class="finger-group" data-finger="r-pinky">
-                                <path class="finger-path" d="M160,120 Q165,70 155,70 T145,120" />
-                                <rect class="nail" x="153" y="75" width="4" height="6" rx="2" />
-                            </g>
-                            <path class="palm" d="M160,120c0,47.8-19,100.9-77.9,100.9C40.7,220.9,20,207.8,20,160" />
                         </svg>
                     </div>
                 </div>

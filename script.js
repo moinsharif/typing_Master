@@ -317,30 +317,58 @@ class TypeMaster {
 
     loadWords() {
         const list = WORD_LISTS[this.currentLevel];
-        const guaranteedWords = [];
         const requiredChars = 'abcdefghijklmnopqrstuvwxyz,./;'.split('');
-        let remainingChars = [...requiredChars];
         
-        // 1. Collect words to cover all keys
-        while (remainingChars.length > 0) {
-            const targetChar = remainingChars[0];
-            const matchingWord = list.find(w => w.includes(targetChar));
-            if (matchingWord) {
-                guaranteedWords.push(matchingWord);
-                remainingChars = remainingChars.filter(char => !matchingWord.includes(char));
+        // 1. Define user-suggested priority words
+        const suggestedWords = ['be', 'can', 'of', 'good', 'the', 'in', 'just', 'know', 'all', 'from', 'person', 'queen', 'have', 'extra', 'you', 'zero', ',', '.', '/', ';'];
+        
+        // 2. Mix and Shuffle required characters to vary the start
+        const shuffledRequired = [...requiredChars].sort(() => Math.random() - 0.5);
+        
+        const guaranteedWords = [];
+        let coveredChars = new Set();
+
+        // 3. First, pick words that cover all required characters
+        for (let char of shuffledRequired) {
+            if (coveredChars.has(char)) continue;
+            
+            // Look for this char in suggested words first
+            const suggMatch = suggestedWords.find(w => w.includes(char));
+            if (suggMatch) {
+                guaranteedWords.push(suggMatch);
+                for (let c of suggMatch) coveredChars.add(c);
             } else {
-                guaranteedWords.push(targetChar);
-                remainingChars.shift();
+                // Otherwise find from the level's list
+                const matches = list.filter(w => w.includes(char));
+                if (matches.length > 0) {
+                    const word = matches[Math.floor(Math.random() * matches.length)];
+                    guaranteedWords.push(word);
+                    for (let c of word) coveredChars.add(c);
+                } else {
+                    guaranteedWords.push(char);
+                    coveredChars.add(char);
+                }
             }
         }
 
-        // 2. Collect remaining words randomly
+        // 4. Mix in remaining suggested words that weren't picked yet
+        suggestedWords.forEach(w => {
+            if (!guaranteedWords.includes(w)) {
+                guaranteedWords.push(w);
+            }
+        });
+
+        // 5. Shuffle the entire guaranteed pool so the order is different every time
+        guaranteedWords.sort(() => Math.random() - 0.5);
+
+        // 6. Fill the rest of the pool with random words from the current level
         const randomWords = [];
-        while (randomWords.length < 250) {
+        const totalTarget = 300;
+        while (randomWords.length < (totalTarget - guaranteedWords.length)) {
             randomWords.push(list[Math.floor(Math.random() * list.length)]);
         }
 
-        // 3. Combine: Guaranteed words come FIRST to ensure coverage even in short sessions
+        // Combine: Guaranteed (randomly ordered) + Random background words
         this.words = [...guaranteedWords, ...randomWords];
         
         this.renderWords();

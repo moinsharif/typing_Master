@@ -37,7 +37,7 @@ body {
     height: 100%;
     z-index: -1;
     background: radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(129, 140, 248, 0.15) 0%, transparent 40%);
+        radial-gradient(circle at 80% 70%, rgba(129, 140, 248, 0.15) 0%, transparent 40%);
 }
 
 .container {
@@ -230,7 +230,8 @@ body {
     font-size: 1.8rem;
     font-weight: 500;
     height: 120px;
-    overflow-y: hidden; /* We handle scrolling via JS */
+    overflow-y: hidden;
+    /* We handle scrolling via JS */
     margin-bottom: 30px;
     line-height: 1.8;
     position: relative;
@@ -267,8 +268,13 @@ body {
     border-radius: 4px;
 }
 
-.letter.correct { color: var(--correct); }
-.letter.wrong { color: var(--wrong); }
+.letter.correct {
+    color: var(--correct);
+}
+
+.letter.wrong {
+    color: var(--wrong);
+}
 
 .input-area {
     display: flex;
@@ -349,8 +355,13 @@ body {
     text-transform: uppercase;
 }
 
-.key.wide { width: 80px; }
-.key.space { width: 250px; }
+.key.wide {
+    width: 80px;
+}
+
+.key.space {
+    width: 250px;
+}
 
 .key.highlight {
     background: var(--finger-color, var(--primary));
@@ -370,30 +381,34 @@ body {
 /* Hands Visualization (Realistic SVG) */
 .keyboard-container {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     position: relative;
-    padding-bottom: 50px;
+    width: 100%;
+    min-height: 250px;
+    /* Ensure space for keyboard */
+    margin: 0 auto;
 }
 
-.hands-overlay {
+.hands-overlay.side-layout {
+    position: absolute;
+    bottom: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 950px;
+    height: 300px;
     display: flex;
-    gap: 100px;
-    margin-top: -80px; /* Pull hands up over keyboard slightly */
+    justify-content: space-between;
     pointer-events: none;
     z-index: 10;
 }
 
-.hand-svg.realistic {
-    width: 220px;
-    height: 220px;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-    opacity: 0.6;
-    transition: opacity 0.3s;
-}
-
-.hand-svg.realistic:hover {
-    opacity: 1;
+.hand-svg-side.realistic {
+    width: 320px;
+    height: 320px;
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6));
+    opacity: 0.5;
+    transition: all 0.3s;
 }
 
 .finger-path {
@@ -415,15 +430,52 @@ body {
 }
 
 /* Color Coding for Fingers & Keys */
-[data-finger="l-pinky"], .key-l-pinky { --finger-color: #f87171; }
-[data-finger="l-ring"], .key-l-ring { --finger-color: #fbbf24; }
-[data-finger="l-middle"], .key-l-middle { --finger-color: #34d399; }
-[data-finger="l-index"], .key-l-index { --finger-color: #60a5fa; }
-[data-finger="l-thumb"], [data-finger="r-thumb"], .key-l-thumb, .key-r-thumb { --finger-color: #a78bfa; }
-[data-finger="r-index"], .key-r-index { --finger-color: #60a5fa; }
-[data-finger="r-middle"], .key-r-middle { --finger-color: #34d399; }
-[data-finger="r-ring"], .key-r-ring { --finger-color: #fbbf24; }
-[data-finger="r-pinky"], .key-r-pinky { --finger-color: #f87171; }
+[data-finger="l-pinky"],
+.key-l-pinky {
+    --finger-color: #f87171;
+}
+
+[data-finger="l-ring"],
+.key-l-ring {
+    --finger-color: #fbbf24;
+}
+
+[data-finger="l-middle"],
+.key-l-middle {
+    --finger-color: #34d399;
+}
+
+[data-finger="l-index"],
+.key-l-index {
+    --finger-color: #60a5fa;
+}
+
+[data-finger="l-thumb"],
+[data-finger="r-thumb"],
+.key-l-thumb,
+.key-r-thumb {
+    --finger-color: #a78bfa;
+}
+
+[data-finger="r-index"],
+.key-r-index {
+    --finger-color: #60a5fa;
+}
+
+[data-finger="r-middle"],
+.key-r-middle {
+    --finger-color: #34d399;
+}
+
+[data-finger="r-ring"],
+.key-r-ring {
+    --finger-color: #fbbf24;
+}
+
+[data-finger="r-pinky"],
+.key-r-pinky {
+    --finger-color: #f87171;
+}
 
 /* Apply colors to keys (subtle indicator) */
 .key.color-hint {
@@ -480,7 +532,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -540,7 +592,8 @@ body {
     border-radius: 8px;
     font-weight: 700;
     cursor: pointer;
-    margin-bottom: 20px; /* Added spacing */
+    margin-bottom: 20px;
+    /* Added spacing */
 }
 
 .toggle-auth {
@@ -561,15 +614,24 @@ body {
     filter: brightness(1.2);
 }
 
-.hidden { display: none !important; }
+.hidden {
+    display: none !important;
+}
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.container > * {
+.container>* {
     animation: fadeIn 0.8s ease forwards;
 }
 
@@ -578,7 +640,8 @@ body {
     margin-top: 20px;
 }
 
-.lb-header, .lb-row {
+.lb-header,
+.lb-row {
     display: grid;
     grid-template-columns: 60px 1fr 60px 60px;
     padding: 12px;
@@ -605,7 +668,10 @@ body {
     margin-right: 15px;
     color: var(--text-muted);
 }
-.user-greet b { color: var(--primary); }
+
+.user-greet b {
+    color: var(--primary);
+}
 
 /* Wide Modals */
 .modal-content.wide {
@@ -624,7 +690,8 @@ body {
     text-align: left;
 }
 
-#admin-table th, #admin-table td {
+#admin-table th,
+#admin-table td {
     padding: 15px;
     border-bottom: 1px solid var(--glass-border);
 }
@@ -667,7 +734,8 @@ body {
 .heatmap-keyboard-wrapper .key.space {
     width: 300px;
 }
-    background: rgba(255, 255, 255, 0.05);
+
+background: rgba(255, 255, 255, 0.05);
 }
 
 .user-link {
