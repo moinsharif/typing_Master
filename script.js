@@ -140,6 +140,70 @@ class TypeMaster {
         });
 
         document.getElementById('auth-form').addEventListener('submit', (e) => this.handleAuth(e));
+
+        const editNameBtn = document.getElementById('edit-name-btn');
+        if (editNameBtn) {
+            editNameBtn.addEventListener('click', () => {
+                document.getElementById('new-username').value = this.user ? this.user.username : "";
+                this.toggleModal('profile-modal', true);
+            });
+        }
+
+        const profileForm = document.getElementById('profile-form');
+        if (profileForm) {
+            profileForm.addEventListener('submit', (e) => this.handleProfileUpdate(e));
+        }
+
+        document.getElementById('fullscreen-btn').addEventListener('click', () => this.toggleFullscreen());
+        document.addEventListener('fullscreenchange', () => this.handleFullscreenChange());
+    }
+
+    async handleProfileUpdate(e) {
+        e.preventDefault();
+        const username = document.getElementById('new-username').value;
+        const password = document.getElementById('new-password').value;
+
+        if (password.length < 6) {
+            alert("Password must be at least 6 characters long.");
+            return;
+        }
+
+        try {
+            const resp = await fetch('api.php?action=update_profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: username.trim(), password })
+            });
+            const result = await resp.json();
+
+            if (result.success) {
+                location.reload(); 
+            } else {
+                alert(result.message);
+            }
+        } catch (err) {
+            console.error('Update profile error:', err);
+        }
+    }
+
+    toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    handleFullscreenChange() {
+        if (document.fullscreenElement) {
+            document.body.classList.add('fullscreen-active');
+            // Auto-focus input when entering fullscreen
+            document.getElementById('typing-input').focus();
+        } else {
+            document.body.classList.remove('fullscreen-active');
+        }
     }
 
     async handleAuth(e) {

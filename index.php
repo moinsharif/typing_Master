@@ -6,8 +6,9 @@ require_once 'db.php';
 if (!isset($_SESSION['user_id'])) {
     if (!isset($_COOKIE['guest_token'])) {
         $guestId = 'Guest_' . substr(uniqid(), -4);
-        $stmt = $pdo->prepare("INSERT INTO users (username, password, is_guest) VALUES (?, 'guest_pass', TRUE)");
-        $stmt->execute([$guestId]);
+        $hashedGuestPass = password_hash('guest_pass', PASSWORD_DEFAULT);
+        $stmt = $pdo->prepare("INSERT INTO users (username, password, is_guest) VALUES (?, ?, TRUE)");
+        $stmt->execute([$guestId, $hashedGuestPass]);
         $newId = $pdo->lastInsertId();
         
         $_SESSION['user_id'] = $newId;
@@ -21,8 +22,11 @@ if (!isset($_SESSION['user_id'])) {
         if ($guest) {
             $_SESSION['user_id'] = $guest['id'];
             $_SESSION['username'] = $guest['username'];
-            $_SESSION['is_guest'] = true;
-            $_SESSION['is_admin'] = false; // Ensure they are not admin
+            $_SESSION['is_guest'] = (bool)$guest['is_guest'];
+            $_SESSION['is_admin'] = (bool)$guest['is_admin'];
+        } else {
+            // Cookie exists but user not found (maybe deleted from DB)
+            setcookie('guest_token', '', time() - 3600, "/");
         }
     }
 }
@@ -56,13 +60,20 @@ echo "<script>console.log('PHP Session User: " . ($username ? $username : 'None'
                 <?php endif; ?>
                 <button id="leaderboard-btn" class="nav-btn">Leaderboard</button>
                 <div id="auth-section">
-                    <?php if ($isLoggedIn && !$isGuest): ?>
-                        <span class="user-greet">Hello, <b><?php echo htmlspecialchars($username); ?></b></span>
+                    <?php if ($isLoggedIn): ?>
+                        <span class="user-greet">Hello, <b id="display-username"><?php echo htmlspecialchars($username); ?></b> 
+                            <?php if ($isGuest): ?>
+                                (Guest) 
+                                <button id="edit-name-btn" class="icon-btn" title="Edit Name">
+                                    <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                                </button>
+                            <?php endif; ?>
+                        </span>
+                        <?php if ($isGuest): ?>
+                            <button id="login-trigger" class="nav-btn primary">Login / Register</button>
+                        <?php endif; ?>
                         <button id="logout-btn" class="nav-btn">Logout</button>
                     <?php else: ?>
-                        <?php if ($isGuest): ?>
-                            <span class="user-greet">Hello, <b><?php echo htmlspecialchars($username); ?></b> (Guest)</span>
-                        <?php endif; ?>
                         <button id="login-trigger" class="nav-btn primary">Login / Register</button>
                     <?php endif; ?>
                 </div>
@@ -113,6 +124,9 @@ echo "<script>console.log('PHP Session User: " . ($username ? $username : 'None'
 
                 <div class="input-area">
                     <input type="text" id="typing-input" autocomplete="off" autofocus placeholder="Type the words here...">
+                    <button id="fullscreen-btn" title="Toggle Fullscreen">
+                        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                    </button>
                     <button id="restart-btn" title="Restart Test">
                         <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
                     </button>
@@ -209,6 +223,25 @@ echo "<script>console.log('PHP Session User: " . ($username ? $username : 'None'
                     <button type="submit" class="submit-btn">Continue</button>
                 </form>
                 <p class="toggle-auth">Don't have an account? <a href="#" id="auth-toggle">Sign Up</a></p>
+                <button class="close-modal">&times;</button>
+            </div>
+        </div>
+
+        <div id="profile-modal" class="modal hidden">
+            <div class="modal-content glass-card">
+                <h2>Upgrade Account</h2>
+                <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 1.5rem;">Set a username and password to save your progress and login later.</p>
+                <form id="profile-form">
+                    <div class="form-group">
+                        <label>New Username</label>
+                        <input type="text" id="new-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="new-password" required placeholder="Min 6 characters">
+                    </div>
+                    <button type="submit" class="submit-btn">Save & Upgrade</button>
+                </form>
                 <button class="close-modal">&times;</button>
             </div>
         </div>

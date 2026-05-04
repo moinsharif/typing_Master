@@ -106,6 +106,25 @@ body {
     color: var(--bg-color);
 }
 
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    transition: all 0.3s;
+    margin-left: 5px;
+}
+
+.icon-btn:hover {
+    color: var(--primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
 /* Hero Section */
 .hero-section {
     text-align: center;
@@ -297,7 +316,8 @@ body {
     border-color: var(--primary);
 }
 
-#restart-btn {
+#restart-btn,
+#fullscreen-btn {
     background: var(--secondary);
     color: white;
     border: none;
@@ -308,7 +328,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.3s;
+    transition: transform 0.3s, background 0.3s;
+}
+
+#fullscreen-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+}
+
+#fullscreen-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--primary);
+    transform: scale(1.05);
 }
 
 #restart-btn:hover {
@@ -735,7 +767,8 @@ body {
     width: 300px;
 }
 
-background: rgba(255, 255, 255, 0.05);
+.lb-row:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .user-link {
@@ -748,4 +781,43 @@ background: rgba(255, 255, 255, 0.05);
 
 .user-link:hover {
     filter: brightness(1.2);
+}
+
+/* Fullscreen Mode */
+body.fullscreen-active {
+    overflow: hidden;
+}
+
+body.fullscreen-active .glass-nav,
+body.fullscreen-active .hero-section,
+body.fullscreen-active .difficulty-selector,
+body.fullscreen-active .time-selector {
+    display: none !important;
+}
+
+body.fullscreen-active .container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    max-width: 1200px;
+}
+
+body.fullscreen-active .typing-container {
+    margin-top: 0;
+    box-shadow: 0 0 50px rgba(56, 189, 248, 0.1);
+}
+
+body.fullscreen-active .keyboard-section {
+    margin-top: 20px;
+}
+
+body.fullscreen-active #fullscreen-btn svg {
+    transform: scale(1.1);
+}
+
+body.fullscreen-active #fullscreen-btn {
+    border-color: var(--primary);
+    color: var(--primary);
 }

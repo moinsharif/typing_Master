@@ -27,9 +27,11 @@ switch ($action) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['is_admin'] = $user['is_admin'];
+            $_SESSION['is_guest'] = (bool)$user['is_guest'];
             echo json_encode(['success' => true, 'user' => [
                 'username' => $user['username'],
-                'is_admin' => (bool)$user['is_admin']
+                'is_admin' => (bool)$user['is_admin'],
+                'is_guest' => (bool)$user['is_guest']
             ]]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
@@ -38,6 +40,7 @@ switch ($action) {
 
     case 'logout':
         session_destroy();
+        setcookie('guest_token', '', time() - 3600, "/");
         echo json_encode(['success' => true]);
         break;
 
@@ -59,7 +62,18 @@ switch ($action) {
         $stmt = $pdo->query("SELECT u.username, r.wpm, r.accuracy, r.difficulty 
                              FROM typing_results r 
                              JOIN users u ON r.user_id = u.id 
-                             ORDER BY r.wpm DESC LIMIT 10");
+                             WHERE r.id IN (
+                                 SELECT MAX(t2.id) 
+                                 FROM typing_results t2
+                                 WHERE (t2.user_id, t2.wpm) IN (
+                                     SELECT user_id, MAX(wpm) 
+                                     FROM typing_results 
+                                     GROUP BY user_id
+                                 )
+                                 GROUP BY t2.user_id
+                             )
+                             ORDER BY r.wpm DESC 
+                             LIMIT 10");
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
         break;
 
@@ -108,6 +122,43 @@ switch ($action) {
         }
         
         echo json_encode(['success' => true, 'analysis' => $final, 'username' => $username]);
+        break;
+
+    case 'update_profile':
+        if (!isset($_SESSION['user_id'])) die(json_encode(['success' => false, 'message' => 'Not logged in']));
+        $data = json_decode(file_get_contents('php://input'), true);
+        $newUsername = trim($data['username'] ?? '');
+        $newPassword = $data['password'] ?? '';
+        
+        if (empty($newUsername)) {
+            die(json_encode(['success' => false, 'message' => 'Username cannot be empty']));
+        }
+
+        try {
+            // Check if username already exists
+            $check = $pdo->prepare("SELECT id FROM users WHERE username = ? AND id != ?");
+            $check->execute([$newUsername, $_SESSION['user_id']]);
+            if ($check->fetch()) {
+                die(json_encode(['success' => false, 'message' => 'Username already taken']));
+            }
+
+            if (!empty($newPassword)) {
+                $hashed = password_hash($newPassword, PASSWORD_DEFAULT);
+                $stmt = $pdo->prepare("UPDATE users SET username = ?, password = ?, is_guest = FALSE WHERE id = ?");
+                $stmt->execute([$newUsername, $hashed, $_SESSION['user_id']]);
+            } else {
+                $stmt = $pdo->prepare("UPDATE users SET username = ?, is_guest = FALSE WHERE id = ?");
+                $stmt->execute([$newUsername, $_SESSION['user_id']]);
+            }
+            
+            $_SESSION['username'] = $newUsername;
+            $_SESSION['is_guest'] = false;
+            setcookie('guest_token', $newUsername, time() + (86400 * 30), "/");
+            
+            echo json_encode(['success' => true, 'username' => $newUsername]);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => 'Error updating profile']);
+        }
         break;
 
     default:
