@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeMaster | Premium Typing Tutor (Standalone)</title>
+    <meta name="description" content="Master your typing speed with TypeMaster. Real-time analysis, virtual keyboard guidance, and advanced performance tracking.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.3);
+            --secondary: #818cf8;
+            --accent: #f472b6;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --correct: #4ade80;
+            --wrong: #f87171;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(129, 140, 248, 0.15) 0%, transparent 40%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Nav Styles */
+        .glass-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn.primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--bg-color);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.primary:hover {
+            background: var(--primary);
+            filter: brightness(1.1);
+            box-shadow: 0 0 15px var(--primary-glow);
+            color: var(--bg-color);
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            vertical-align: middle;
+            transition: all 0.3s;
+            margin-left: 5px;
+        }
+
+        .icon-btn:hover {
+            color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero-section h1 {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .hero-section h1 span {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-section p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* Difficulty Selector */
+        .difficulty-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .diff-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .diff-btn.active {
+            background: var(--primary);
+            color: var(--bg-color);
+            box-shadow: 0 0 20px var(--primary-glow);
+            border-color: var(--primary);
+        }
+
+        .time-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .time-selector .label {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .time-btn {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 5px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .time-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Typing Area */
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-item .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: var(--font-heading);
+        }
+
+        .words-wrapper {
+            font-size: 1.8rem;
+            font-weight: 500;
+            height: 120px;
+            overflow-y: hidden;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            position: relative;
+            user-select: none;
+            scroll-behavior: smooth;
+        }
+
+        .word {
+            display: inline-block;
+            margin-right: 12px;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .word.current {
+            color: var(--text-main);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .word.correct {
+            color: var(--correct);
+        }
+
+        .word.wrong {
+            color: var(--wrong);
+        }
+
+        .letter {
+            position: relative;
+        }
+
+        .letter.correct {
+            color: var(--correct);
+        }
+
+        .letter.wrong {
+            color: var(--wrong);
+        }
+
+        .input-area {
+            display: flex;
+            gap: 15px;
+        }
+
+        #typing-input {
+            flex-grow: 1;
+            background: rgba(15, 23, 42, 0.5);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: var(--text-main);
+            font-size: 1.2rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #typing-input:focus {
+            border-color: var(--primary);
+        }
+
+        #restart-btn,
+        #fullscreen-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        #fullscreen-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+        }
+
+        #fullscreen-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        #restart-btn:hover {
+            transform: rotate(180deg);
+        }
+
+        /* Virtual Keyboard */
+        .keyboard-section {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .keyboard {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .kb-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .key {
+            width: 45px;
+            height: 45px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            transition: all 0.1s;
+            text-transform: uppercase;
+        }
+
+        .key.space {
+            width: 250px;
+        }
+
+        .key.highlight {
+            background: var(--finger-color, var(--primary));
+            color: var(--bg-color);
+            box-shadow: 0 0 20px var(--finger-color);
+            border-color: var(--finger-color);
+            transform: scale(1.08);
+            z-index: 5;
+        }
+
+        .key.pressed {
+            background: var(--secondary);
+            color: white;
+            transform: scale(0.95);
+        }
+
+        .keyboard-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            min-height: 250px;
+            margin: 0 auto;
+        }
+
+        .hands-overlay.side-layout {
+            position: absolute;
+            bottom: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 950px;
+            height: 300px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .hand-svg-side.realistic {
+            width: 320px;
+            height: 320px;
+            filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6));
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .finger-path {
+            fill: rgba(255, 255, 255, 0.08);
+            stroke: rgba(255, 255, 255, 0.3);
+            stroke-width: 2;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nail {
+            fill: rgba(255, 255, 255, 0.2);
+        }
+
+        .palm {
+            fill: rgba(255, 255, 255, 0.05);
+            stroke: rgba(255, 255, 255, 0.3);
+            stroke-width: 2;
+        }
+
+        /* Color Coding */
+        [data-finger="l-pinky"], .key-l-pinky { --finger-color: #f87171; }
+        [data-finger="l-ring"], .key-l-ring { --finger-color: #fbbf24; }
+        [data-finger="l-middle"], .key-l-middle { --finger-color: #34d399; }
+        [data-finger="l-index"], .key-l-index { --finger-color: #60a5fa; }
+        [data-finger="l-thumb"], [data-finger="r-thumb"], .key-l-thumb, .key-r-thumb { --finger-color: #a78bfa; }
+        [data-finger="r-index"], .key-r-index { --finger-color: #60a5fa; }
+        [data-finger="r-middle"], .key-r-middle { --finger-color: #34d399; }
+        [data-finger="r-ring"], .key-r-ring { --finger-color: #fbbf24; }
+        [data-finger="r-pinky"], .key-r-pinky { --finger-color: #f87171; }
+
+        .key.color-hint {
+            border-bottom: 3px solid var(--finger-color);
+        }
+
+        .finger-group.highlight .finger-path {
+            fill: var(--finger-color);
+            stroke: var(--finger-color);
+            filter: drop-shadow(0 0 10px var(--finger-color));
+        }
+
+        .finger-group.highlight .nail { fill: white; }
+
+        /* Analysis Section */
+        .analysis-grid { margin-top: 40px; }
+        .analysis-card h3 { margin-bottom: 20px; font-family: var(--font-heading); }
+        .heatmap-container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .heatmap-key { padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; font-size: 0.8rem; min-width: 40px; text-align: center; }
+        .advice-content { padding: 15px; background: rgba(56, 189, 248, 0.1); border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; }
+
+        /* Modals */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal.visible { opacity: 1; pointer-events: auto; }
+        .modal-content { width: 100%; max-width: 400px; position: relative; }
+        .modal-content.wide { max-width: 800px; }
+        .close-modal { position: absolute; top: 15px; right: 20px; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); }
+        .form-group input { width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); border-radius: 8px; color: white; }
+        .submit-btn { width: 100%; padding: 12px; background: var(--primary); color: var(--bg-color); border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-bottom: 20px; }
+        .toggle-auth { text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+        .toggle-auth a { color: var(--primary); text-decoration: none; font-weight: 800; margin-left: 5px; }
+
+        .hidden { display: none !important; }
+
+        /* Admin Table */
+        .admin-table-container { margin-top: 20px; overflow-x: auto; }
+        #admin-table { width: 100%; border-collapse: collapse; text-align: left; }
+        #admin-table th, #admin-table td { padding: 15px; border-bottom: 1px solid var(--glass-border); }
+        #admin-table th { color: var(--primary); font-family: var(--font-heading); text-transform: uppercase; font-size: 0.8rem; }
+        
+        .lb-header, .lb-row { display: grid; grid-template-columns: 60px 1fr 60px 60px; padding: 12px; border-bottom: 1px solid var(--glass-border); }
+        .lb-header { font-weight: 700; color: var(--primary); text-transform: uppercase; font-size: 0.8rem; }
+        .user-greet { margin-right: 15px; color: var(--text-muted); }
+        .user-greet b { color: var(--primary); }
+
+        /* Fullscreen Mode */
+        body.fullscreen-active { overflow: hidden; }
+        body.fullscreen-active .glass-nav, body.fullscreen-active .hero-section, body.fullscreen-active .difficulty-selector, body.fullscreen-active .time-selector { display: none !important; }
+        body.fullscreen-active .container { height: 100vh; display: flex; align-items: center; justify-content: center; padding: 0; }
+        body.fullscreen-active .typing-container { width: 90%; max-width: 1200px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .container > * { animation: fadeIn 0.8s ease forwards; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <nav class="glass-nav">
+            <div class="logo">Type<span>Master</span></div>
+            <div class="nav-links">
+                <button id="admin-btn" class="nav-btn hidden">Admin Panel</button>
+                <button id="leaderboard-btn" class="nav-btn">Leaderboard</button>
+                <div id="auth-section">
+                    <!-- Dynamic Auth Info -->
+                </div>
+            </div>
+        </nav>
+
+        <main class="container">
+            <header class="hero-section">
+                <h1>Elevate Your <span>Typing</span></h1>
+                <p>Advanced tutor with real-time finger analysis and adaptive learning.</p>
+            </header>
+
+            <section class="difficulty-selector">
+                <button class="diff-btn active" data-level="very-easy">Very Easy</button>
+                <button class="diff-btn" data-level="easy">Easy</button>
+                <button class="diff-btn" data-level="medium">Medium</button>
+                <button class="diff-btn" data-level="hard">Hard</button>
+                <button class="diff-btn" data-level="very-hard">Very Hard</button>
+            </section>
+
+            <section class="time-selector">
+                <span class="label">Duration:</span>
+                <button class="time-btn active" data-time="60">1m</button>
+                <button class="time-btn" data-time="120">2m</button>
+                <button class="time-btn" data-time="180">3m</button>
+                <button class="time-btn" data-time="300">5m</button>
+            </section>
+
+            <div class="typing-container glass-card">
+                <div class="stats-bar">
+                    <div class="stat-item"><span class="label">WPM</span><span id="wpm-val" class="value">0</span></div>
+                    <div class="stat-item"><span class="label">Accuracy</span><span id="acc-val" class="value">0%</span></div>
+                    <div class="stat-item"><span class="label">Time</span><span id="timer-val" class="value">60s</span></div>
+                </div>
+
+                <div id="words-display" class="words-wrapper"></div>
+
+                <div class="input-area">
+                    <input type="text" id="typing-input" autocomplete="off" autofocus placeholder="Type the words here...">
+                    <button id="fullscreen-btn" title="Toggle Fullscreen">
+                        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                    </button>
+                    <button id="restart-btn" title="Restart Test">
+                        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <section id="keyboard-wrapper" class="keyboard-section">
+                <div class="keyboard-container">
+                    <div class="keyboard"></div>
+                    <div class="hands-overlay side-layout">
+                        <!-- Left Hand -->
+                        <svg class="hand-svg-side realistic" id="left-hand-svg" viewBox="0 0 300 300">
+                            <g class="hand-group" id="left-hand">
+                                <g class="finger-group" data-finger="l-pinky">
+                                    <path class="finger-path" d="M33.1,132.4c0-53.1-5.3-79.8-16-79.8s-13.2,26.7-8,79.8"/>
+                                    <path class="nail" d="M20.4,63.7v3.2c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2c0-1.8,1.4-3.2,3.2-3.2l0,0 C18.9,60.6,20.4,62,20.4,63.7z"/>
+                                </g>
+                                <g class="finger-group" data-finger="l-ring">
+                                    <path class="finger-path" d="M73,116.4c0-63.8-5.3-95.8-16-95.8s-13.2,31.9-8,95.8"/>
+                                    <path class="nail" d="M60.3,31.8V35c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2c0-1.8,1.4-3.2,3.2-3.2l0,0 C58.8,28.6,60.3,30.1,60.3,31.8z"/>
+                                </g>
+                                <g class="finger-group" data-finger="l-middle">
+                                    <path class="finger-path" d="M112.9,108.4c0-69.1-5.3-103.7-16-103.7s-13.2,34.6-8,103.7"/>
+                                    <path class="nail" d="M100.2,15.9v3.2c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2c0-1.8,1.4-3.2,3.2-3.2l0,0 C98.7,12.7,100.2,14.1,100.2,15.9z"/>
+                                </g>
+                                <g class="finger-group" data-finger="l-index">
+                                    <path class="finger-path" d="M152.8,116.4c0-58.6-5.3-87.8-16-87.8s-13.2,29.2-8,87.8"/>
+                                    <path class="nail" d="M140.1,39.8V43c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2c0-1.8,1.4-3.2,3.2-3.2l0,0 C138.6,36.6,140.1,38.1,140.1,39.8z"/>
+                                </g>
+                                <g class="finger-group" data-finger="l-thumb">
+                                    <path class="finger-path" d="M164,175.1c71.5-82.5,53.5-115.9-9.9-32.2"/>
+                                    <path class="nail" d="M203.4,101.4l1.3,0.8c1.4,0.8,1.9,2.6,1,4l-2.6,3.8c-0.8,1.4-2.9,1.9-4.3,1.1l-1.3-0.8c-1.4-0.8-1.9-2.6-1-4l2.6-3.8 C200.1,101.1,202.1,100.6,203.4,101.4z"/>
+                                </g>
+                                <path class="palm" d="M152.8,116.4c-2.4,48.7,18.7,63.5,22.3,91c6.2,47.1-6.5,80.6-41.7,86 c-92.9,14.4-124.3-84.7-124.3-161"/>
+                            </g>
+                        </svg>
+
+                        <!-- Right Hand -->
+                        <svg class="hand-svg-side realistic" id="right-hand-svg" viewBox="300 0 300 300">
+                            <g class="hand-group" id="right-hand">
+                                <g class="finger-group" data-finger="r-thumb">
+                                    <path class="finger-path" d="M452.1,142.9c-63.4-83.6-81.4-50.3-9.9,32.2"/>
+                                    <path class="nail" d="M407.1,102.5l2.6,3.8c1,1.4,0.5,3.2-1,4l-1.3,0.8c-1.4,0.8-3.5,0.3-4.3-1.1l-2.6-3.8c-1-1.4-0.5-3.2,1-4l1.3-0.8 C404.1,100.6,406.1,101.1,407.1,102.5z"/>
+                                </g>
+                                <g class="finger-group" data-finger="r-index">
+                                    <path class="finger-path" d="M477.3,116.4c5.3-58.6,2.7-87.8-8-87.8c-10.7,0-16,29.2-16,87.8"/>
+                                    <path class="nail" d="M469.3,36.6L469.3,36.6c1.8,0,3.2,1.4,3.2,3.2V43c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2 C466.1,38.1,467.6,36.6,469.3,36.6z"/>
+                                </g>
+                                <g class="finger-group" data-finger="r-middle">
+                                    <path class="finger-path" d="M517.2,108.4c5.3-69.1,2.7-103.7-8-103.7s-16,34.6-16,103.7"/>
+                                    <path class="nail" d="M509.2,12.7L509.2,12.7c1.8,0,3.2,1.4,3.2,3.2v3.2c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2 C506,14.1,507.5,12.7,509.2,12.7z"/>
+                                </g>
+                                <g class="finger-group" data-finger="r-ring">
+                                    <path class="finger-path" d="M557.1,116.4c5.3-63.8,2.7-95.8-8-95.8c-10.7,0-16,31.9-16,95.8"/>
+                                    <path class="nail" d="M549.1,28.6L549.1,28.6c1.8,0,3.2,1.4,3.2,3.2V35c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2 C545.9,30.1,547.4,28.6,549.1,28.6z"/>
+                                </g>
+                                <g class="finger-group" data-finger="r-pinky">
+                                    <path class="finger-path" d="M597,132.4c5.3-53.1,2.7-79.8-8-79.8s-16,26.7-16,79.8"/>
+                                    <path class="nail" d="M589,60.6L589,60.6c1.8,0,3.2,1.4,3.2,3.2v3.2c0,1.8-1.4,3.2-3.2,3.2l0,0c-1.8,0-3.2-1.4-3.2-3.2v-3.2 C585.8,62,587.3,60.6,589,60.6z"/>
+                                </g>
+                                <path class="palm" d="M597,132.4c0,76.3-31.4,175.4-124.3,161c-35.1-5.4-47.9-38.9-41.7-86 c3.7-27.5,24.7-42.3,22.3-91"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <section id="analysis-panel" class="analysis-grid hidden">
+                <div class="glass-card analysis-card">
+                    <h3>Performance Analysis</h3>
+                    <div id="key-heatmap" class="heatmap-container"></div>
+                    <div id="advice-box" class="advice-content">
+                        <p>Start typing to see your personalized advice!</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modals -->
+        <div id="auth-modal" class="modal hidden">
+            <div class="modal-content glass-card">
+                <h2 id="modal-title">Welcome Back</h2>
+                <form id="auth-form">
+                    <div class="form-group"><label>Username</label><input type="text" id="username" required></div>
+                    <div class="form-group"><label>Password</label><input type="password" id="password" required></div>
+                    <button type="submit" class="submit-btn">Continue</button>
+                </form>
+                <p class="toggle-auth">Don't have an account? <a href="#" id="auth-toggle">Sign Up</a></p>
+                <button class="close-modal">&times;</button>
+            </div>
+        </div>
+
+        <div id="profile-modal" class="modal hidden">
+            <div class="modal-content glass-card">
+                <h2>Upgrade Account</h2>
+                <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 1.5rem;">Set a username and password to save your progress and login later.</p>
+                <form id="profile-form">
+                    <div class="form-group"><label>New Username</label><input type="text" id="new-username" required></div>
+                    <div class="form-group"><label>New Password</label><input type="password" id="new-password" required placeholder="Min 6 characters"></div>
+                    <button type="submit" class="submit-btn">Save & Upgrade</button>
+                </form>
+                <button class="close-modal">&times;</button>
+            </div>
+        </div>
+
+        <div id="leaderboard-modal" class="modal hidden">
+            <div class="modal-content glass-card wide">
+                <h2>Top Typists</h2>
+                <div class="leaderboard-list"></div>
+                <button class="close-modal">&times;</button>
+            </div>
+        </div>
+
+        <div id="admin-modal" class="modal hidden">
+            <div class="modal-content glass-card wide">
+                <h2>Admin Dashboard - All Learners</h2>
+                <div class="admin-table-container">
+                    <table id="admin-table">
+                        <thead><tr><th>Learner</th><th>Sessions</th><th>Avg WPM</th><th>Best WPM</th><th>Avg Acc</th></tr></thead>
+                        <tbody id="admin-stats-body"></tbody>
+                    </table>
+                </div>
+                <button class="close-modal">&times;</button>
+            </div>
+        </div>
+
+        <div id="user-detail-modal" class="modal hidden">
+            <div class="modal-content glass-card wide">
+                <h2 id="detail-user-name">User Report</h2>
+                <div class="analysis-card">
+                    <h3>Performance Heatmap</h3>
+                    <div id="heatmap-keyboard-container" class="heatmap-keyboard-wrapper"></div>
+                    <div id="user-advice-box" class="advice-content"></div>
+                </div>
+                <button class="close-modal">&times;</button>
+            </div>
+        </div>
+
+        <div class="bg-glow"></div>
+    </div>
+
+    <script>
+        // Standalone Storage Simulation
+        const Storage = {
+            getUsers: () => JSON.parse(localStorage.getItem('tm_users') || '[]'),
+            setUsers: (users) => localStorage.setItem('tm_users', JSON.stringify(users)),
+            getResults: () => JSON.parse(localStorage.getItem('tm_results') || '[]'),
+            setResults: (results) => localStorage.setItem('tm_results', JSON.stringify(results)),
+            getCurrentUser: () => JSON.parse(localStorage.getItem('tm_current_user')),
+            setCurrentUser: (user) => localStorage.setItem('tm_current_user', JSON.stringify(user))
+        };
+
+        const WORD_LISTS = {
+            'very-easy': ['the', 'of', 'and', 'a', 'to', 'in', 'is', 'you', 'that', 'it', 'he', 'was', 'for', 'on', 'are', 'as', 'with', 'his', 'they', 'at', 'be', 'this', 'have', 'from', 'or', 'one', 'had', 'by', 'word', 'but', 'not', 'what', 'all', 'were', 'we', 'when', 'your', 'can', 'said', 'there', 'use', 'an', 'each', 'which', 'she', 'do', 'how', 'their', 'if', 'just', 'him', 'know', 'take', 'person', 'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see', 'other', 'than', 'then', 'now', 'look', 'only', 'come', 'its', 'over', 'think', 'also', 'back', 'after', 'use', 'two', 'how', 'our', 'work', 'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'these', 'give', 'day', 'most', 'us', 'very', 'many', 'make', 'here', 'life', 'get', 'much', 'before', 'right', 'those', 'through', 'own', 'long', 'where', 'around', 'must', 'help', 'queen', 'zero', 'extra', 'box', 'vivid', 'jump', 'lazy', 'dog', 'quick', 'fox'],
+            'easy': ['about', 'many', 'then', 'them', 'these', 'so', 'some', 'her', 'would', 'make', 'like', 'him', 'into', 'time', 'has', 'look', 'two', 'more', 'write', 'go', 'see', 'number', 'no', 'way', 'could', 'people', 'my', 'than', 'first', 'water', 'been', 'called', 'who', 'oil', 'its', 'now', 'find', 'long', 'down', 'day', 'did', 'get', 'come', 'made', 'may', 'part', 'over', 'such', 'sound', 'take', 'only', 'little', 'work', 'know', 'year', 'live', 'me', 'back', 'give', 'most', 'very', 'after', 'thing', 'our', 'just', 'name', 'good', 'sentence', 'man', 'think', 'say', 'great', 'where', 'help', 'through', 'much', 'before', 'line', 'right', 'too', 'means', 'old', 'any', 'same', 'tell', 'boy', 'follow', 'came', 'want', 'show', 'also', 'around', 'form', 'three', 'small', 'puzzles', 'quartz', 'vortex', 'zigzag', 'joker', 'boxing'],
+            'medium': ['mountain', 'discover', 'beautiful', 'wonderful', 'fountain', 'building', 'tomorrow', 'computer', 'science', 'history', 'language', 'country', 'important', 'example', 'experience', 'together', 'problem', 'thought', 'through', 'between', 'sentence', 'difference', 'possible', 'government', 'interest', 'process', 'increase', 'surface', 'material', 'special', 'natural', 'general', 'current', 'provide', 'suggest', 'develop', 'consider', 'public', 'system', 'program', 'during', 'present', 'without', 'follow', 'believe', 'create', 'control', 'happen', 'write', 'support', 'require', 'decide', 'expect', 'receive', 'change', 'remain', 'remember', 'allow', 'appear', 'continue', 'suggest', 'increase', 'improve', 'compare', 'expect', 'analyze', 'oxygen', 'complex', 'equinox', 'juxtapose', 'zephyr', 'vibrant', 'keyboard'],
+            'hard': ['encyclopedia', 'characteristic', 'sophisticated', 'unbelievable', 'extraordinary', 'implementation', 'communication', 'organization', 'relationship', 'development', 'environment', 'information', 'knowledge', 'perspective', 'philosophy', 'psychology', 'technology', 'understanding', 'visualization', 'opportunity', 'competition', 'consequence', 'destination', 'exploration', 'imagination', 'innovation', 'observation', 'participation', 'achievement', 'environment', 'description', 'everything', 'generation', 'historical', 'management', 'necessary', 'particular', 'successful', 'themselves', 'traditional', 'university', 'collection', 'conference', 'difficulty', 'experience', 'individual', 'investment', 'performance', 'production', 'significant', 'situation', 'successful', 'themselves', 'traditional', 'underneath', 'xenon', 'quartz', 'quizzical', 'objective', 'frequency'],
+            'very-hard': ['pneumonoultramicroscopicsilicovolcanoconiosis', 'floccinaucinihilipilification', 'antidisestablishmentarianism', 'honorificabilitudinitatibus', 'spectrophotofluorometrically', 'pseudopseudohypoparathyroidism', 'psychoneuroendocrinoimmunology', 'hepaticocholangiogastroenterostomy', 'radioimmunoelectrophoresis', 'thyroparathyroidectomized', 'dichlorodiphenyltrichloroethane', 'incomprehensibilities', 'unpredictability', 'institutionalization', 'unconstitutionality', 'characteristically', 'disproportionately', 'counterproductive', 'misunderstanding', 'synchronization', 'transformation', 'unavailability', 'vulnerability', 'acknowledgment', 'revolutionary', 'simultaneously', 'sophistication', 'superintendent', 'unidirectional', 'quantitatively', 'neutralization', 'lexicographical']
+        };
+
+        const KEYBOARD_LAYOUT = [['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';'],['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/'],['space']];
+        const FINGER_MAP = {'q': 'l-pinky', 'a': 'l-pinky', 'z': 'l-pinky','w': 'l-ring', 's': 'l-ring', 'x': 'l-ring','e': 'l-middle', 'd': 'l-middle', 'c': 'l-middle','r': 'l-index', 'f': 'l-index', 'v': 'l-index','t': 'l-index', 'g': 'l-index', 'b': 'l-index','y': 'r-index', 'h': 'r-index', 'n': 'r-index','u': 'r-index', 'j': 'r-index', 'm': 'r-index','i': 'r-middle', 'k': 'r-middle', ',': 'r-middle','o': 'r-ring', 'l': 'r-ring', '.': 'r-ring','p': 'r-pinky', ';': 'r-pinky', '/': 'r-pinky','space': 'r-thumb'};
+
+        class TypeMaster {
+            constructor() {
+                this.currentLevel = 'very-easy';
+                this.selectedDuration = 60;
+                this.words = [];
+                this.currentWordIndex = 0;
+                this.currentLetterIndex = 0;
+                this.startTime = null;
+                this.timer = null;
+                this.timeLeft = 60;
+                this.isActive = false;
+                this.user = null;
+                this.stats = { correct: 0, wrong: 0, keyTimings: {}, lastKeyTime: null };
+                this.init();
+            }
+
+            init() {
+                this.handleGuestAutoLogin();
+                this.renderKeyboard();
+                this.setupEventListeners();
+                this.loadWords();
+                this.updateAuthUI();
+                this.updateUI();
+            }
+
+            handleGuestAutoLogin() {
+                let currentUser = Storage.getCurrentUser();
+                if (!currentUser) {
+                    const guestId = 'Guest_' + Math.random().toString(36).substr(-4);
+                    currentUser = { username: guestId, is_guest: true, is_admin: false, id: Date.now() };
+                    const users = Storage.getUsers();
+                    users.push(currentUser);
+                    Storage.setUsers(users);
+                    Storage.setCurrentUser(currentUser);
+                }
+                this.user = currentUser;
+            }
+
+            renderKeyboard() {
+                const kb = document.querySelector('.keyboard');
+                kb.innerHTML = '';
+                KEYBOARD_LAYOUT.forEach(row => {
+                    const rowEl = document.createElement('div');
+                    rowEl.className = 'kb-row';
+                    row.forEach(key => {
+                        const keyEl = document.createElement('div');
+                        const fingerId = FINGER_MAP[key.toLowerCase()];
+                        keyEl.className = `key ${key === 'space' ? 'space' : ''} color-hint ${fingerId ? 'key-'+fingerId : ''}`;
+                        keyEl.textContent = key === 'space' ? '' : key;
+                        keyEl.dataset.key = key;
+                        rowEl.appendChild(keyEl);
+                    });
+                    kb.appendChild(rowEl);
+                });
+            }
+
+            setupEventListeners() {
+                const input = document.getElementById('typing-input');
+                input.addEventListener('input', (e) => this.handleInput(e));
+                input.addEventListener('keydown', (e) => this.handleKeyDown(e));
+                
+                document.querySelectorAll('.diff-btn').forEach(btn => btn.addEventListener('click', () => {
+                    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    this.currentLevel = btn.dataset.level;
+                    this.reset();
+                }));
+
+                document.querySelectorAll('.time-btn').forEach(btn => btn.addEventListener('click', () => {
+                    document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    this.selectedDuration = parseInt(btn.dataset.time);
+                    this.reset();
+                }));
+
+                document.getElementById('restart-btn').addEventListener('click', () => this.reset());
+                document.getElementById('leaderboard-btn').addEventListener('click', () => this.toggleModal('leaderboard-modal', true));
+                document.getElementById('fullscreen-btn').addEventListener('click', () => this.toggleFullscreen());
+                document.addEventListener('fullscreenchange', () => this.handleFullscreenChange());
+                
+                document.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', (e) => this.toggleModal(e.target.closest('.modal').id, false)));
+                
+                document.getElementById('auth-toggle').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const title = document.getElementById('modal-title');
+                    const submitBtn = document.querySelector('.submit-btn');
+                    const isSwitchingToSignUp = title.textContent === 'Welcome Back';
+                    title.textContent = isSwitchingToSignUp ? 'Create Account' : 'Welcome Back';
+                    submitBtn.textContent = isSwitchingToSignUp ? 'Register' : 'Continue';
+                    e.target.textContent = isSwitchingToSignUp ? 'Sign In' : 'Sign Up';
+                });
+
+                document.getElementById('auth-form').addEventListener('submit', (e) => this.handleAuth(e));
+                document.getElementById('profile-form').addEventListener('submit', (e) => this.handleProfileUpdate(e));
+            }
+
+            updateAuthUI() {
+                const authSection = document.getElementById('auth-section');
+                if (this.user) {
+                    authSection.innerHTML = `
+                        <span class="user-greet">Hello, <b id="display-username">${this.user.username}</b> 
+                            ${this.user.is_guest ? `(Guest) <button id="edit-name-btn" class="icon-btn"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>` : ''}
+                        </span>
+                        ${this.user.is_guest ? '<button id="login-trigger" class="nav-btn primary">Login / Register</button>' : ''}
+                        <button id="logout-btn" class="nav-btn">Logout</button>
+                    `;
+                    
+                    const loginTrigger = document.getElementById('login-trigger');
+                    if (loginTrigger) loginTrigger.addEventListener('click', () => this.toggleModal('auth-modal', true));
+                    
+                    document.getElementById('logout-btn').addEventListener('click', () => this.logout());
+                    
+                    const editBtn = document.getElementById('edit-name-btn');
+                    if (editBtn) editBtn.addEventListener('click', () => {
+                        document.getElementById('new-username').value = this.user.username;
+                        this.toggleModal('profile-modal', true);
+                    });
+                } else {
+                    authSection.innerHTML = `<button id="login-trigger" class="nav-btn primary">Login / Register</button>`;
+                    document.getElementById('login-trigger').addEventListener('click', () => this.toggleModal('auth-modal', true));
+                }
+            }
+
+            handleAuth(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                const isLogin = document.getElementById('modal-title').textContent === 'Welcome Back';
+                const users = Storage.getUsers();
+
+                if (isLogin) {
+                    const user = users.find(u => u.username === username && u.password === password);
+                    if (user) {
+                        Storage.setCurrentUser(user);
+                        location.reload();
+                    } else { alert("Invalid credentials"); }
+                } else {
+                    if (users.find(u => u.username === username)) { alert("Username exists"); return; }
+                    const newUser = { id: Date.now(), username, password, is_guest: false, is_admin: false };
+                    users.push(newUser);
+                    Storage.setUsers(users);
+                    alert("Registered! Please login.");
+                    document.getElementById('auth-toggle').click();
+                }
+            }
+
+            handleProfileUpdate(e) {
+                e.preventDefault();
+                const username = document.getElementById('new-username').value.trim();
+                const password = document.getElementById('new-password').value;
+                if (password.length < 6) { alert("Min 6 chars"); return; }
+
+                const users = Storage.getUsers();
+                if (users.find(u => u.username === username && u.id !== this.user.id)) { alert("Username taken"); return; }
+
+                const userIndex = users.findIndex(u => u.id === this.user.id);
+                users[userIndex].username = username;
+                users[userIndex].password = password;
+                users[userIndex].is_guest = false;
+                
+                Storage.setUsers(users);
+                Storage.setCurrentUser(users[userIndex]);
+                location.reload();
+            }
+
+            logout() {
+                localStorage.removeItem('tm_current_user');
+                location.reload();
+            }
+
+            toggleModal(id, show) {
+                const modal = document.getElementById(id);
+                if (show) {
+                    modal.classList.remove('hidden');
+                    setTimeout(() => modal.classList.add('visible'), 10);
+                    if (id === 'leaderboard-modal') this.renderLeaderboard();
+                } else {
+                    modal.classList.remove('visible');
+                    setTimeout(() => modal.classList.add('hidden'), 300);
+                }
+            }
+
+            renderLeaderboard() {
+                const results = Storage.getResults();
+                const users = Storage.getUsers();
+                // Get best result per user
+                const bestResults = {};
+                results.forEach(r => {
+                    if (!bestResults[r.userId] || r.wpm > bestResults[r.userId].wpm) {
+                        bestResults[r.userId] = r;
+                    }
+                });
+
+                const sorted = Object.values(bestResults).sort((a, b) => b.wpm - a.wpm).slice(0, 10);
+                const list = document.querySelector('.leaderboard-list');
+                list.innerHTML = `
+                    <div class="lb-header"><span>Rank</span><span>Name</span><span>WPM</span><span>ACC</span></div>
+                    ${sorted.map((r, i) => {
+                        const user = users.find(u => u.id === r.userId);
+                        return `<div class="lb-row"><span>#${i+1}</span><span>${user ? user.username : 'Unknown'}</span><span>${r.wpm}</span><span>${r.accuracy}%</span></div>`;
+                    }).join('')}
+                `;
+            }
+
+            loadWords() {
+                const list = WORD_LISTS[this.currentLevel];
+                this.words = Array.from({length: 100}, () => list[Math.floor(Math.random() * list.length)]);
+                this.renderWords();
+            }
+
+            renderWords() {
+                const container = document.getElementById('words-display');
+                container.innerHTML = this.words.map((w, i) => `
+                    <div class="word ${i === 0 ? 'current' : ''}">${w.split('').map(l => `<span class="letter">${l}</span>`).join('')}</div>
+                `).join('');
+                this.highlightNextKey();
+            }
+
+            handleInput(e) {
+                if (!this.isActive && e.target.value.length > 0) this.start();
+                const typed = e.target.value;
+                const currentWord = this.words[this.currentWordIndex];
+                const wordEl = document.querySelectorAll('.word')[this.currentWordIndex];
+                const letters = wordEl.querySelectorAll('.letter');
+
+                const now = performance.now();
+                if (this.stats.lastKeyTime) {
+                    const diff = now - this.stats.lastKeyTime;
+                    const lastChar = typed[typed.length-1];
+                    if (lastChar && lastChar !== ' ') {
+                        if (!this.stats.keyTimings[lastChar]) this.stats.keyTimings[lastChar] = [];
+                        this.stats.keyTimings[lastChar].push(diff);
+                    }
+                }
+                this.stats.lastKeyTime = now;
+
+                if (typed.endsWith(' ')) {
+                    const wordToCompare = typed.trim();
+                    wordEl.className = `word ${wordToCompare === currentWord ? 'correct' : 'wrong'}`;
+                    if (wordToCompare === currentWord) this.stats.correct++; else this.stats.wrong++;
+                    this.currentWordIndex++;
+                    this.currentLetterIndex = 0;
+                    e.target.value = '';
+                    if (this.currentWordIndex >= this.words.length) this.finish(); else this.updateActiveWord();
+                } else {
+                    letters.forEach((span, idx) => {
+                        if (idx < typed.length) span.className = typed[idx] === currentWord[idx] ? 'letter correct' : 'letter wrong';
+                        else span.className = 'letter';
+                    });
+                    this.currentLetterIndex = typed.length;
+                }
+                this.updateUI();
+                this.highlightNextKey();
+            }
+
+            handleKeyDown(e) {
+                const keyEl = document.querySelector(`.key[data-key="${e.key.toLowerCase()}"]`) || (e.key === ' ' ? document.querySelector('.key.space') : null);
+                if (keyEl) { keyEl.classList.add('pressed'); setTimeout(() => keyEl.classList.remove('pressed'), 100); }
+            }
+
+            highlightNextKey() {
+                document.querySelectorAll('.key').forEach(k => k.classList.remove('highlight'));
+                document.querySelectorAll('.finger-group').forEach(f => f.classList.remove('highlight'));
+                if (this.currentLevel !== 'very-easy') return;
+                const currentWord = this.words[this.currentWordIndex];
+                const typed = document.getElementById('typing-input').value;
+                let nextChar = (typed.length < currentWord.length) ? currentWord[typed.length] : 'space';
+                const keyEl = document.querySelector(`.key[data-key="${nextChar.toLowerCase()}"]`) || (nextChar === 'space' ? document.querySelector('.key.space') : null);
+                if (keyEl) {
+                    keyEl.classList.add('highlight');
+                    const fingerId = FINGER_MAP[nextChar.toLowerCase()];
+                    if (fingerId) document.querySelector(`.finger-group[data-finger="${fingerId}"]`)?.classList.add('highlight');
+                }
+            }
+
+            updateActiveWord() {
+                const words = document.querySelectorAll('.word');
+                words.forEach(w => w.classList.remove('current'));
+                if (words[this.currentWordIndex]) {
+                    words[this.currentWordIndex].classList.add('current');
+                    const container = document.getElementById('words-display');
+                    const activeWord = words[this.currentWordIndex];
+                    if (activeWord.offsetTop > container.offsetHeight + container.scrollTop - 40) container.scrollTop = activeWord.offsetTop - 40;
+                }
+            }
+
+            start() {
+                this.isActive = true;
+                this.timer = setInterval(() => {
+                    this.timeLeft--;
+                    if (this.timeLeft <= 0) this.finish();
+                    this.updateUI();
+                }, 1000);
+            }
+
+            finish() {
+                clearInterval(this.timer);
+                this.isActive = false;
+                document.getElementById('typing-input').disabled = true;
+                const total = this.stats.correct + this.stats.wrong;
+                const accuracy = total === 0 ? 0 : Math.round((this.stats.correct / total) * 100);
+                const elapsed = (this.selectedDuration - this.timeLeft) / 60;
+                const wpm = elapsed === 0 ? 0 : Math.round(this.stats.correct / elapsed);
+                
+                const results = Storage.getResults();
+                results.push({ userId: this.user.id, wpm, accuracy, difficulty: this.currentLevel, keyAnalysis: this.stats.keyTimings, date: Date.now() });
+                Storage.setResults(results);
+                this.showAnalysis();
+            }
+
+            reset() {
+                clearInterval(this.timer);
+                this.isActive = false;
+                this.timeLeft = this.selectedDuration;
+                this.currentWordIndex = 0;
+                this.currentLetterIndex = 0;
+                this.stats = { correct: 0, wrong: 0, keyTimings: {}, lastKeyTime: null };
+                document.getElementById('typing-input').value = '';
+                document.getElementById('typing-input').disabled = false;
+                document.getElementById('typing-input').focus();
+                document.getElementById('analysis-panel').classList.add('hidden');
+                this.loadWords();
+                this.updateUI();
+            }
+
+            updateUI() {
+                document.getElementById('timer-val').textContent = `${this.timeLeft}s`;
+                const total = this.stats.correct + this.stats.wrong;
+                const accuracy = total === 0 ? 0 : Math.round((this.stats.correct / total) * 100);
+                document.getElementById('acc-val').textContent = `${accuracy}%`;
+                const elapsed = (this.selectedDuration - this.timeLeft) / 60;
+                const wpm = elapsed === 0 ? 0 : Math.round(this.stats.correct / elapsed);
+                document.getElementById('wpm-val').textContent = wpm;
+            }
+
+            showAnalysis() {
+                const panel = document.getElementById('analysis-panel');
+                panel.classList.remove('hidden');
+                const heatmap = document.getElementById('key-heatmap');
+                heatmap.innerHTML = '';
+                const slowKeys = [];
+                for (const [key, times] of Object.entries(this.stats.keyTimings)) {
+                    const avg = times.reduce((a, b) => a + b, 0) / times.length;
+                    const keyEl = document.createElement('div');
+                    keyEl.className = 'heatmap-key';
+                    keyEl.innerHTML = `${key}<br><small>${Math.round(avg)}ms</small>`;
+                    if (avg > 400) { keyEl.style.background = 'rgba(248, 113, 113, 0.3)'; slowKeys.push({key, avg}); }
+                    else if (avg > 200) { keyEl.style.background = 'rgba(251, 191, 36, 0.3)'; }
+                    else { keyEl.style.background = 'rgba(74, 222, 128, 0.3)'; }
+                    heatmap.appendChild(keyEl);
+                }
+                const adviceBox = document.getElementById('advice-box');
+                if (slowKeys.length > 0) {
+                    slowKeys.sort((a, b) => b.avg - a.avg);
+                    const topSlow = slowKeys.slice(0, 3).map(k => `"${k.key.toUpperCase()}"`).join(', ');
+                    adviceBox.innerHTML = `<h4>Personalized Advice</h4><p>You are taking more time on: <b>${topSlow}</b>. Practice these more!</p>`;
+                } else {
+                    adviceBox.innerHTML = `<h4>Great Job!</h4><p>Your typing is consistent. Try higher difficulty!</p>`;
+                }
+                panel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            toggleFullscreen() {
+                if (!document.fullscreenElement) { document.documentElement.requestFullscreen(); } 
+                else { document.exitFullscreen(); }
+            }
+
+            handleFullscreenChange() {
+                if (document.fullscreenElement) { document.body.classList.add('fullscreen-active'); document.getElementById('typing-input').focus(); }
+                else { document.body.classList.remove('fullscreen-active'); }
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => { window.TM = new TypeMaster(); });
+    </script>
+</body>
+</html>
